@@ -1,0 +1,42 @@
+#!/usr/bin/env ruby
+require 'bundler/setup'
+Bundler.require
+require 'net/http'
+
+def fetch(url)
+  Net::HTTP.get(URI.parse(url))
+end
+
+def fetch_metadata(url)
+  # Fetch metadata, e.g., date and time of last fetch, num_links, images
+  # This is a placeholder. You should modify it based on your actual implementation.
+  doc = Nokogiri::HTML(Net::HTTP.get(URI.parse(url)))
+  num_links = doc.css('a').count
+  num_images = doc.css('img').count
+  last_fetch = Time.now.utc
+
+  { num_links: num_links, num_images: num_images, last_fetch: last_fetch }
+end
+
+# Check if metadata flag is provided
+if ARGV.empty?
+  puts 'Please provide a URL as an argument.'
+elsif ARGV.include?('--metadata')
+  ARGV.drop(1).each do |url|
+    metadata = fetch_metadata(url)
+    puts "site: #{url}"
+    metadata.each { |key, value| puts "#{key}: #{value}" }
+  end
+else
+  puts(ARGV)
+  ARGV.each do |url|
+    puts('*'*100)
+    puts(url)
+    file_name = File.basename(url).concat('.html')
+    file_name = file_name.prepend('html_files/')
+    puts file_name
+    content = fetch(url)
+    File.write(file_name, content)
+    puts "Content of #{url} has been saved to #{file_name}"
+  end
+end

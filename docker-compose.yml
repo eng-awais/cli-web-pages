@@ -1,0 +1,8 @@
+version: '3.8'
+
+services:
+  fetch:
+    image: fetch
+    build: .
+    volumes:
+      - ./html_files:/app/html_files
