@@ -25,8 +25,8 @@ docker-compose up
 ```
 Fetch web pages with the following command
 ```sh
-docker-compose run —rm fetch /app/fetch https://autify.com`
+docker-compose run —rm fetch /app/fetch https://autify.com
 ```
 ```sh
-docker-compose run —rm fetch /app/fetch https://www.google.com`
+docker-compose run —rm fetch /app/fetch https://www.google.com
 ```
